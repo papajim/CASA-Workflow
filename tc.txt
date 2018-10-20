@@ -1,0 +1,35 @@
+cont casa_image {
+    type "docker"
+    image_site "condorpool"
+	image "file://${PWD}/bin/casa-app.tar"
+}
+
+tr um_vel {
+	site condorpool {
+		container "casa_image"
+		pfn "/opt/UM_VEL/UM_VEL"
+		arch "x86_64"
+		os "LINUX"
+		type "INSTALLED"
+	}
+}
+
+tr merged_netcdf2png {
+	site condorpool {
+        container "casa_image"
+		pfn "/opt/netcdf2png/merged_netcdf2png"
+		arch "x86_64"
+		os "LINUX"
+		type "INSTALLED"
+	}
+}
+
+tr mvt {
+	site condorpool {
+		container "casa_image"
+		pfn "/opt/mvt/mvt"
+		arch "x86_64"
+		os "LINUX"
+		type "INSTALLED"
+	}
+}

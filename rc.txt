@@ -1,0 +1,1 @@
+netcdf_input        file://${PWD}/input/addison.tx-20180809-220005.netcdf       site="local"
