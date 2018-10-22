@@ -23,9 +23,9 @@ class CASAWorkflow(object):
         #dax.metadata("creator", "%s@%s" % (USER, os.uname()[1]))
         #dax.metadata("created", time.ctime())
 
-
         # unzip files if needed
         radar_inputs = []
+        last_time = "0"
         for f in self.radar_files:
             if f.endswith(".gz"):
                 radar_input = f[:-3]
@@ -38,50 +38,37 @@ class CASAWorkflow(object):
                 dax.addJob(unzip)
             else:
                 radar_inputs.append(f)
-
-
-        max_velocities = []
-        for f in radar_inputs:
-            max_velocities.append(File("MaxVelocity_"+f))
-
+            string_start = f.find("-")
+            string_end = f.find(".", string_start)
+            file_time = f[string_start+1:string_end]
+            if file_time > last_time:
+                last_time = file_time
         
-        # calculate max velocity
+        #calculate max velocity (maybe split them to multiple ones)
+        max_velocity = File("MaxVelocity_"+last_time+".netcdf")
         vel_job = Job("um_vel")
-        vel_job.addArguments(" ".join(self.radar_files))
+        vel_job.addArguments(" ".join(radar_inputs))
         for radar_input in radar_inputs:
             vel_job.uses(radar_input, link=Link.INPUT)
-        for max_velocity in max_velocities:
-            vel_job.uses(max_velocity, link=Link.OUTPUT, transfer=True, register=False)
+        vel_job.uses(max_velocity, link=Link.OUTPUT, transfer=True, register=False)
         dax.addJob(vel_job)
 
-
-        max_velocity_images = []
-        geojson_files = []
-        for max_velocity in max_velocities:
-            max_velocity_images.append(File(max_velocity.name+".png")) # change this file name
-            geojson_files.append(File(max_velocity.name+".geojson")) # change this file name
-
-        # generate images from max velocities
+        # generate image from max velocity
         colorscale = File("max_wind.png")
-        post_vel_files = zip(max_velocities, max_velocity_images)
-        for file_set in post_vel_files:
-            post_vel_job = Job("merged_netcdf2png")
-            post_vel_job.addArguments("-c", colorscale, "-q 235 -z 11.176,38", "-o", file_set[1], file_set[0])
-            post_vel_job.uses(file_set[0], link=Link.INPUT)
-            post_vel_job.uses(file_set[1], link=Link.OUTPUT, transfer=True, register=False)
-            dax.addJob(post_vel_job)
+        max_velocity_image = File(max_velocity.name[:-7]+".png")
+        post_vel_job = Job("merged_netcdf2png")
+        post_vel_job.addArguments("-c", colorscale, "-q 235 -z 11.176,38", "-o", max_velocity_image, max_velocity)
+        post_vel_job.uses(max_velocity, link=Link.INPUT)
+        post_vel_job.uses(max_velocity_image, link=Link.OUTPUT, transfer=True, register=False)
+        dax.addJob(post_vel_job)
 
-        # generate geojson files from max velocities
-        mvt_files = zip(max_velocities, geojson_files)
-        for file_set in mvt_files:
-            mvt_job = Job("mvt")
-            mvt_job.addArguments(file_set[0])
-            mvt_job.uses(file_set[0], link=Link.INPUT)
-            mvt_job.uses(file_set[1], link=Link.OUTPUT, transfer=True, register=False)
-            dax.addJob(mvt_job)
-
-        #adds file to ldm queue for other to take
-        #post_mvt_job=Job("")
+        # generate geojson file from max velocity
+        geojson_file = File(max_velocity.name[:-7]+".geojson")
+        mvt_job = Job("mvt")
+        mvt_job.addArguments(max_velocity)
+        mvt_job.uses(max_velocity, link=Link.INPUT)
+        mvt_job.uses(geojson_file, link=Link.OUTPUT, transfer=True, register=False)
+        dax.addJob(mvt_job)
 
         # Write the DAX file
         dax.writeXMLFile(self.daxfile)
@@ -92,8 +79,8 @@ class CASAWorkflow(object):
 
 if __name__ == '__main__':
     parser = ArgumentParser(description="CASA Workflow")
-    parser.add_argument("-f", "--files", metavar="INPUT_FILES", type=str, nargs="+", help="Configuration File", required=True)
-    #parser.add_argument("-o", "--outdir", metavar="OUTPUT_LOCATION", type=str, help="Workflow Directory", required=True)
+    parser.add_argument("-f", "--files", metavar="INPUT_FILES", type=str, nargs="+", help="Radar Files", required=True)
+    #parser.add_argument("-o", "--outdir", metavar="OUTPUT_LOCATION", type=str, help="DAX Directory", required=True)
 
     args = parser.parse_args()
 
