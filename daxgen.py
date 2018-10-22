@@ -25,7 +25,7 @@ class CASAWorkflow(object):
 
         # unzip files if needed
         radar_inputs = []
-        last_time = "0"
+        #last_time = "0"
         for f in self.radar_files:
             if f.endswith(".gz"):
                 radar_input = f[:-3]
@@ -38,12 +38,16 @@ class CASAWorkflow(object):
                 dax.addJob(unzip)
             else:
                 radar_inputs.append(f)
-            string_start = f.find("-")
-            string_end = f.find(".", string_start)
-            file_time = f[string_start+1:string_end]
-            if file_time > last_time:
-                last_time = file_time
+            #string_start = f.find("-")
+            #string_end = f.find(".", string_start)
+            #file_time = f[string_start+1:string_end]
+            #if file_time > last_time:
+            #    last_time = file_time
         
+        string_start = self.radar_files[-1].find("-")
+        string_end = self.radar_files[-1].find(".", string_start)
+        last_time = self.radar_files[-1][string_start+1:string_end]
+
         #calculate max velocity (maybe split them to multiple ones)
         max_velocity = File("MaxVelocity_"+last_time+".netcdf")
         vel_job = Job("um_vel")
