@@ -1,0 +1,5 @@
+bin/casa-app.tar
+scratch/
+input/*netcdf*
+input/backup
+*.dax
