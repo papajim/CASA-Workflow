@@ -4,6 +4,15 @@ cont casa_image {
 	image "file://${PWD}/bin/casa-app.tar"
 }
 
+tr gunzip {
+    site condorpool {
+		pfn "/bin/gunzip"
+		arch "x86_64"
+		os "LINUX"
+		type "INSTALLED"
+    }
+}
+
 tr um_vel {
 	site condorpool {
 		container "casa_image"

@@ -3,3 +3,5 @@ scratch/
 input/*netcdf*
 input/backup
 *.dax
+submit/
+output/

@@ -9,9 +9,8 @@ from datetime import datetime
 from argparse import ArgumentParser
 
 class CASAWorkflow(object):
-    def __init__(self, radar_files):
-        #self.daxfile = os.path.join(self.outdir, "dax.xml")
-        self.daxfile = "casa.dax"
+    def __init__(self, outdir, radar_files):
+        self.outdir = outdir
         self.radar_files = radar_files
 
     def generate_dax(self):
@@ -63,11 +62,12 @@ class CASAWorkflow(object):
         post_vel_job = Job("merged_netcdf2png")
         post_vel_job.addArguments("-c", colorscale, "-q 235 -z 11.176,38", "-o", max_velocity_image, max_velocity)
         post_vel_job.uses(max_velocity, link=Link.INPUT)
+        post_vel_job.uses(colorscale, link=Link.INPUT)
         post_vel_job.uses(max_velocity_image, link=Link.OUTPUT, transfer=True, register=False)
         dax.addJob(post_vel_job)
 
         # generate geojson file from max velocity
-        geojson_file = File(max_velocity.name[:-7]+".geojson")
+        geojson_file = File("mvt_"+max_velocity.name[:-7]+".geojson")
         mvt_job = Job("mvt")
         mvt_job.addArguments(max_velocity)
         mvt_job.uses(max_velocity, link=Link.INPUT)
@@ -75,8 +75,10 @@ class CASAWorkflow(object):
         dax.addJob(mvt_job)
 
         # Write the DAX file
-        dax.writeXMLFile(self.daxfile)
-        
+        daxfile = os.path.join(self.outdir, dax.name+".dax")
+        dax.writeXMLFile(daxfile)
+        print daxfile
+
     def generate_workflow(self):
         # Generate dax
         self.generate_dax()
@@ -84,17 +86,13 @@ class CASAWorkflow(object):
 if __name__ == '__main__':
     parser = ArgumentParser(description="CASA Workflow")
     parser.add_argument("-f", "--files", metavar="INPUT_FILES", type=str, nargs="+", help="Radar Files", required=True)
-    #parser.add_argument("-o", "--outdir", metavar="OUTPUT_LOCATION", type=str, help="DAX Directory", required=True)
+    parser.add_argument("-o", "--outdir", metavar="OUTPUT_LOCATION", type=str, help="DAX Directory", required=True)
 
     args = parser.parse_args()
+    outdir = os.path.abspath(args.outdir)
+    
+    if not os.path.isdir(args.outdir):
+        os.makedirs(outdir)
 
-    #if os.path.isdir(args.outdir):
-    #    raise Exception("Directory exists: %s" % args.outdir)
-
-    # Create the output directory
-    #outdir = os.path.abspath(args.outdir)
-    #os.makedirs(outdir)
-
-
-    workflow = CASAWorkflow(args.files)
+    workflow = CASAWorkflow(outdir, args.files)
     workflow.generate_workflow()

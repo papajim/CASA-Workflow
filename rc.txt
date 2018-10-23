@@ -1,1 +1,2 @@
-netcdf_input        file://${PWD}/input/addison.tx-20180809-220005.netcdf       site="local"
+max_wind.png            file://${PWD}/input/max_wind.png        site="local"
+.*                      file://${PWD}/input/[0]                 site="local"    regex="true"
