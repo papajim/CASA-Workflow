@@ -1,2 +1,4 @@
-max_wind.png            file://${PWD}/input/max_wind.png        site="local"
-.*                      file://${PWD}/input/[0]                 site="local"    regex="true"
+max_wind.png                    file://${PWD}/input/max_wind.png                    site="local"
+pointAlert_config.txt           file://${PWD}/input/pointAlert_config.txt           site="local"
+hospital_locations.geojson      file://${PWD}/input/hospital_locations.geojson      site="local"
+#.*                             file://${PWD}/input/[0]                             site="local"    regex="true"

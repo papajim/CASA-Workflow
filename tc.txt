@@ -42,3 +42,13 @@ tr mvt {
 		type "INSTALLED"
 	}
 }
+
+tr pointAlert {
+	site condorpool {
+		container "casa_image"
+		pfn "/opt/pointAlert/pointAlert"
+		arch "x86_64"
+		os "LINUX"
+		type "INSTALLED"
+	}
+}

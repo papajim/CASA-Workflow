@@ -1,4 +1,4 @@
-bin/casa-app.tar
+bin/
 scratch/
 input/*netcdf*
 input/backup

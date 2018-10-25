@@ -1,0 +1,30 @@
+//*********************email_notification_config.txt****************************//
+//**$Id:email_notification_config.txt, v 0.9 2018-04-17 16:01:02 elyons Exp $***//
+//******Copyright 2018 University of Massachusetts Amherst*******//
+//********************All rights reserved************************//
+//***************************************************************//
+//***************************************************************//
+//*email_notification_config.txt is used by the 'email_notification' program. Do not rename****//
+//*The EMAIL_NOTIFICATION_HOME environment variable defines email_notification_config's location//
+//*****Make sure all lines are terminated with a semi-colon******//
+//***************************************************************//
+
+//string email_from is the email address that will be appear as the sender
+email_from = "noreply@casaalerts.com";
+
+email_to_params = 
+{
+
+//string email_to is an array listing the recipients
+email_to = [ "elyons19@hotmail.com" ];
+
+//float email_threshold is the trigger to send an email
+//This could become a per recipient array at some point
+//email_threshold = 0.01;
+
+};
+
+//string dataType is the name of the property that should be read 
+data_type = "mag";
+
+
