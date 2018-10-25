@@ -71,7 +71,7 @@ class CASAWorkflow(object):
         mvt_job = Job("mvt")
         mvt_job.addArguments(max_velocity)
         mvt_job.uses(max_velocity, link=Link.INPUT)
-        mvt_job.uses(mvt_geojson_file, link=Link.OUTPUT, transfer=False, register=False)
+        mvt_job.uses(mvt_geojson_file, link=Link.OUTPUT, transfer=True, register=False)
         dax.addJob(mvt_job)
 
         # generate geojson file from max velocity
