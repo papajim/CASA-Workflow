@@ -67,7 +67,7 @@ class CASAWorkflow(object):
         dax.addJob(post_vel_job)
 
         # generate geojson file from max velocity
-        mvt_geojson_file = File("orig_mvt_"+max_velocity.name[:-7]+".geojson")
+        mvt_geojson_file = File("mvt_"+max_velocity.name[:-7]+".geojson")
         mvt_job = Job("mvt")
         mvt_job.addArguments(max_velocity)
         mvt_job.uses(max_velocity, link=Link.INPUT)
@@ -75,7 +75,7 @@ class CASAWorkflow(object):
         dax.addJob(mvt_job)
 
         # generate geojson file from max velocity
-        pointalert_geojson_file = File("mvt_"+max_velocity.name[:-7]+".geojson")
+        pointalert_geojson_file = File("alert_mvt_"+max_velocity.name[:-7]+".geojson")
         pointalert_config = File("pointAlert_config.txt")
         hospitals_geojson_file = File("hospital_locations.geojson")
         pointalert_job = Job("pointalert")
