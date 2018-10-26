@@ -43,7 +43,7 @@ tr mvt {
 	}
 }
 
-tr pointAlert {
+tr pointalert {
 	site condorpool {
 		container "casa_image"
 		pfn "/opt/pointAlert/pointAlert"
