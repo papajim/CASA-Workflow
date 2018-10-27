@@ -75,16 +75,16 @@ class CASAWorkflow(object):
         dax.addJob(mvt_job)
 
         # generate alert geojson file from max velocity
-        pointalert_geojson_file = File("alert_mvt_"+max_velocity.name[:-7]+".geojson")
         pointalert_config = File("pointAlert_config.txt")
         hospitals_geojson_file = File("hospital_locations.geojson")
+        alert_geojson_file = File("alert_"+last_time+".geojson")
         pointalert_job = Job("pointalert")
-        #pointalert_job.addArguments("-c", pointalert_config, "-e -p -g", hospitals_geojson_file, mvt_geojson_file)
-        pointalert_job.addArguments("-c", pointalert_config, "-p -g", hospitals_geojson_file, mvt_geojson_file)
+        #pointalert_job.addArguments("-c", pointalert_config, "-e -p", "-o", alert_geojson_file, "-g", hospitals_geojson_file, mvt_geojson_file)
+        pointalert_job.addArguments("-c", pointalert_config, "-p", "-o", alert_geojson_file, "-g", hospitals_geojson_file, mvt_geojson_file)
         pointalert_job.uses(pointalert_config, link=Link.INPUT)
         pointalert_job.uses(hospitals_geojson_file, link=Link.INPUT)
         pointalert_job.uses(mvt_geojson_file, link=Link.INPUT)
-        pointalert_job.uses(pointalert_geojson_file, link=Link.OUTPUT, transfer=True, register=False)
+        pointalert_job.uses(alert_geojson_file, link=Link.OUTPUT, transfer=True, register=False)
         dax.addJob(pointalert_job)
         
         # Write the DAX file
