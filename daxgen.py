@@ -26,6 +26,7 @@ class CASAWorkflow(object):
         radar_inputs = []
         #last_time = "0"
         for f in self.radar_files:
+            f = f.split("/")[-1]
             if f.endswith(".gz"):
                 radar_input = f[:-3]
                 radar_inputs.append(radar_input)
@@ -79,8 +80,8 @@ class CASAWorkflow(object):
         hospitals_geojson_file = File("hospital_locations.geojson")
         alert_geojson_file = File("alert_"+last_time+".geojson")
         pointalert_job = Job("pointalert")
-        #pointalert_job.addArguments("-c", pointalert_config, "-e -p", "-o", alert_geojson_file, "-g", hospitals_geojson_file, mvt_geojson_file)
-        pointalert_job.addArguments("-c", pointalert_config, "-p", "-o", alert_geojson_file, "-g", hospitals_geojson_file, mvt_geojson_file)
+        pointalert_job.addArguments("-c", pointalert_config, "-e -p", "-o", alert_geojson_file, "-g", hospitals_geojson_file, mvt_geojson_file)
+        #pointalert_job.addArguments("-c", pointalert_config, "-p", "-o", alert_geojson_file, "-g", hospitals_geojson_file, mvt_geojson_file)
         pointalert_job.uses(pointalert_config, link=Link.INPUT)
         pointalert_job.uses(hospitals_geojson_file, link=Link.INPUT)
         pointalert_job.uses(mvt_geojson_file, link=Link.INPUT)

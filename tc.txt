@@ -1,7 +1,7 @@
 cont casa_image {
-    type "docker"
+    type "singularity"
     image_site "condorpool"
-	image "file://${PWD}/bin/casa-app.tar"
+    image "file://${PWD}/bin/casa-app.simg"
 }
 
 tr gunzip {
