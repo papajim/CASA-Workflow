@@ -87,7 +87,13 @@ class CASAWorkflow(object):
         pointalert_job.uses(mvt_geojson_file, link=Link.INPUT)
         pointalert_job.uses(alert_geojson_file, link=Link.OUTPUT, transfer=True, register=False)
         dax.addJob(pointalert_job)
-        
+     
+        #insert files to the ldmqueue
+        #pqinsert_job = Job("pqinsert")
+        #pqinsert_job.addArguments("-f EXP -p", max_velocity_image, "${SCRATCH_DIR}/"+max_velocity_image.name)
+        #pqinsert_job.uses(max_velocity_image, link=Link.INPUT)
+        #dax.addJob(pqinsert_job)
+
         # Write the DAX file
         daxfile = os.path.join(self.outdir, dax.name+".dax")
         dax.writeXMLFile(daxfile)

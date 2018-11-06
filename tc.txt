@@ -52,3 +52,13 @@ tr pointalert {
 		type "INSTALLED"
 	}
 }
+
+tr pqinsert {
+    site condorpool {
+        pfn "/home/ldm/bin/pqinsert"
+        arch "x86_64"
+        os "LINUX"
+        type "INSTALLED"
+        profile condor "requirements" "Machine == \"master\""
+    }
+}

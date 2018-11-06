@@ -23,4 +23,4 @@ pegasus-plan --conf pegasus.properties \
     --output-site local \
     --cleanup leaf \
     --force \
-    --submit
+#    --submit
