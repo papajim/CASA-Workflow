@@ -22,5 +22,6 @@ pegasus-plan --conf pegasus.properties \
     --sites condorpool \
     --output-site local \
     --cleanup leaf \
+    --cluster label \
     --force \
-#    --submit
+    --submit

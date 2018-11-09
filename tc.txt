@@ -10,6 +10,7 @@ tr gunzip {
 		arch "x86_64"
 		os "LINUX"
 		type "INSTALLED"
+        profile pegasus "label" "unzip"
     }
 }
 
@@ -20,6 +21,7 @@ tr um_vel {
 		arch "x86_64"
 		os "LINUX"
 		type "INSTALLED"
+        profile pegasus "label" "casa_job"
 	}
 }
 
@@ -30,6 +32,7 @@ tr merged_netcdf2png {
 		arch "x86_64"
 		os "LINUX"
 		type "INSTALLED"
+        profile pegasus "label" "casa_job"
 	}
 }
 
@@ -40,6 +43,7 @@ tr mvt {
 		arch "x86_64"
 		os "LINUX"
 		type "INSTALLED"
+        profile pegasus "label" "casa_job"
 	}
 }
 
@@ -50,15 +54,6 @@ tr pointalert {
 		arch "x86_64"
 		os "LINUX"
 		type "INSTALLED"
+        profile pegasus "label" "casa_job"
 	}
-}
-
-tr pqinsert {
-    site condorpool {
-        pfn "/home/ldm/bin/pqinsert"
-        arch "x86_64"
-        os "LINUX"
-        type "INSTALLED"
-        profile condor "requirements" "Machine == \"master\""
-    }
 }
